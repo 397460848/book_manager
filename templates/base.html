@@ -1,0 +1,83 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon"
+          href="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570890077205&di=7cae1000a5340cb8d6475ec228cc2bdc&imgtype=0&src=http%3A%2F%2Fico.58pic.com%2Ficonset02%2F12%2Fgif%2F66263.gif">
+
+    <title>图书管理系统</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+</head>
+
+<body>
+{% block body %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">图书管理系统</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/app01/logout/">注销登录</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/app01/set_password/">修改密码</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">{{ request.user }}</a></li>
+                </ul>
+                <form id="search" class="navbar-form navbar-right" action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" class="form-control" placeholder="搜索..." name="keyword">
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    {% block nav %}
+                        <li class="active"><a href="/app01/book_manage/">书籍管理</a></li>
+                        <li><a href="/app01/author_manage/">作者管理</a></li>
+                        <li><a href="/app01/publish_manage/">出版社管理</a></li>
+                    {% endblock nav %}
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                {% block content %}
+                    <div class="table-responsive col-sm-4 col-sm-offset-3 col-md-6 col-md-offset-2">
+                {% endblock content %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+{% endblock body %}
+{% block js %}
+{% endblock js %}
+<script>
+    let href = $(".nav-sidebar .active").index();
+    $("#search").attr('action', "/app01/search/?search=" + href)
+</script>
+</html>

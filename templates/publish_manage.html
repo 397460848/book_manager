@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block nav %}
+    <li><a href="/app01/book_manage/">书籍管理</a></li>
+    <li><a href="/app01/author_manage/">作者管理</a></li>
+    <li class="active"><a href="/app01/publish_manage/">出版社管理</a></li>
+{% endblock nav %}
+{% block content %}
+    <h1 class="page-header">出版社管理</h1>
+    <div class="table-responsive">
+        <a href="/app01/add_publish/" type="button" class="btn btn-primary btn-default">新增出版社</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>id</th>
+                <th>出版社名</th>
+                <th>城市</th>
+                <th>email</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for publish in publish_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ publish.id }}</td>
+                    <td>{{ publish.name }}</td>
+                    <td>{{ publish.city }}</td>
+                    <td>{{ publish.email }}</td>
+                    <td>
+                        <button class="btn_del btn btn-danger btn-sm" pk={{ publish.id }}>删除</button>
+                        <a href="/app01/edit_publish/?publish_id={{ publish.id }}"
+                           class="btn_edit btn btn-warning btn-sm">编辑</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
+
+        // 删除按钮
+        $(".btn_del").click(function () {
+            tr_obj = $(this).parent().parent();
+            publish_id = $(this).attr('pk');
+            $.ajax({
+                url: '/app01/del_publish/',
+                type: 'get',
+                data: {
+                    publish_id: publish_id
+                },
+                success: function (data) {
+                    let text = "删除失败";
+                    if (data.status) {
+                        text = "删除成功";
+                    }
+                    tr_obj.html("<td  style='color:red;' height='47px;' colspan=" + tr_obj.children().length + ">" + text + "</td>");
+                }
+            })
+        });
+    </script>
+{% endblock js %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block body %}
+    <body>
+    <link rel="stylesheet" href="/static/css/signin.css">
+    <div class="container">
+
+        <form action="" class="form-signin" method="post">
+            {% csrf_token %}
+            <h2 class="form-signin-heading">图书管理系统</h2>
+            <input type="text" id="username" class="form-control" placeholder="Username" required=""
+                   autofocus="" name="username">
+            <input type="password" id="password" class="form-control" placeholder="Password" required=""
+                   name="password">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="text" id="exampleInputFile" class="form-control col-sm-3" placeholder="验证码" name="valid_code">
+                    </div>
+                    <div class="col-sm-4">
+                        {#                        <img src="/static/images/111.png" alt="">#}
+                        <img id="img1" src="/app01/valid_img/" alt="">
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+            <a href="/app01/sign_up/" class="btn btn-lg btn-info btn-block" type="submit">注册</a>
+        </form>
+
+    </div> <!-- /container -->
+
+    </body>
+{% endblock body %}
+{% block js %}
+    <script>
+        $("#img1").click(function () {
+            $(this).attr('src', "/app01/valid_img/?num=" + Math.random())
+        })
+    </script>
+{% endblock js %}

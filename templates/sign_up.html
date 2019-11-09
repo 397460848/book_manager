@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block body %}
+    <body>
+    <link rel="stylesheet" href="/static/css/signin.css">
+    <div class="container">
+
+        <form action="" class="form-signin" method="post">
+            {% csrf_token %}
+            <h2 class="form-signin-heading">图书管理系统</h2>
+
+            <input type="text" id="username" class="form-control" placeholder="用户名" name="username">
+            <label for="username" id="username_label">请输入用户名</label>
+
+            <input type="password" id="pwd" class="form-control" placeholder="密码" required=""
+                   name="pwd" style="margin-top: 10px; margin-bottom: 5px" autocomplete="new-password">
+            <input type="password" id="pwd_ensure" class="form-control" placeholder="确认密码" required=""
+                   name="pwd_ensure" autocomplete="off">
+            <label for="pwd" id="pwd_label"></label>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">确认注册</button>
+        </form>
+
+    </div> <!-- /container -->
+
+    </body>
+{% endblock body %}
+{% block js %}
+    <script>
+        $("#username").blur(function () {
+            username = $(this).val();
+            $.ajax({
+                url: '/app01/sign_up/',
+                method: 'post',
+                data: {
+                    username: username,
+                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                },
+                success: function (data) {
+                    if (data == 'false') {
+                        $("#username_label").html('用户名已存在').attr('style', 'color:red');
+                    } else {
+                        $("#username_label").html('用户名可用√').attr('style', 'color:green');
+                    }
+                }
+            })
+        });
+
+        $('#pwd,#pwd_ensure').blur(function () {
+            pwd1 = $('#pwd').val();
+            pwd2 = $('#pwd_ensure').val();
+            if (pwd1 !== "" && pwd2 !== ""
+            ) {
+                if (pwd1 !== pwd2) {
+                    $('#pwd_label').html('两次密码不一致').attr('style', 'color:red').show()
+                } else {
+                    $('#pwd_label').html('两次密码相同√').attr('style', 'color:green').show()
+                }
+
+            }
+        })
+    </script>
+
+{% endblock js %}
+

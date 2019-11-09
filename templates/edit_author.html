@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block nav %}
+    <li><a href="/app01/book_manage/">书籍管理</a></li>
+    <li class="active"><a href="/app01/author_manage/">作者管理</a></li>
+    <li><a href="/app01/publish_manage/">出版社管理</a></li>
+{% endblock nav %}
+{% block content %}
+    <h1 class="page-header">作者管理</h1>
+    {{ block.super }}
+    <form action="?author_id={{ author_obj.id }}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">姓名</label>
+            <input type="text" class="form-control" id="name" name="name" value={{ author_obj.name }}>
+        </div>
+        <div class="form-group">
+            <label for="age">年龄</label>
+            <input type="number" class="form-control" id="age" name="age" value={{ author_obj.age }}>
+        </div>
+        <div class="form-group">
+            <label for="gender">性别</label>
+            <select name="gender" id="gender" class="form-control">
+                {% for gender in audt_obj.gender_choices %}
+                    {% if  author_obj.au_detail.gender == gender.0 %}
+                        <option value={{ gender.0 }} selected>{{ gender.1 }}</option>
+                    {% else %}
+                        <option value={{ gender.0 }}>{{ gender.1 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="tel">电话</label>
+            <input type="number" class="form-control" id="tel" name="tel" value={{ author_obj.au_detail.tel }}>
+        </div>
+        <div class="form-group">
+            <label for="addr">地址</label>
+            <input type="text" class="form-control" id="addr" name="addr" value={{ author_obj.au_detail.addr }}>
+        </div>
+        <div class="form-group">
+            <label for="birthday">生日</label>
+            <input type="date" class="form-control" id="birthday" name="birthday"
+                   value={{ author_obj.au_detail.birthday|date:"Y-m-d" }}>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+{% endblock content %}

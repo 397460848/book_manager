@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1 class="page-header">书籍管理</h1>
+    {{ block.super }}
+    <form action="?book_id={{ book_obj.id }}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">书名</label>
+            <input type="text" class="form-control" id="title" name="title" value={{ book_obj.title }}>
+        </div>
+        <div class="form-group">
+            <label for="price">价格</label>
+            <input type="number" class="form-control" id="price" name="price" value={{ book_obj.price }}>
+        </div>
+        <div class="form-group">
+            <label for="author">作者管理</label>
+            <select name="author" id="author" class="form-control" multiple>
+                {% for author in author_list %}
+                    {% if author in book_obj.authors.all %}
+                        <option value={{ author.id }} selected>{{ author.name }}</option>
+                    {% else %}
+                        <option value={{ author.id }}>{{ author.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="publish">出版社</label>
+            <select name="publish_id" id="publish" class="form-control">
+                {% for publish in publish_list %}
+                    {% if publish.id == book_obj.publish_id %}
+                        <option value={{ publish.id }} selected>{{ publish.name }}</option>
+                    {% else %}
+                        <option value={{ publish.id }}>{{ publish.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="pub_date">出版时间</label>
+            <input type="date" class="form-control" id="pub_date" name="pub_date"
+                   value={{ book_obj.pub_date | date:"Y-m-d" }}>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+{% endblock content %}

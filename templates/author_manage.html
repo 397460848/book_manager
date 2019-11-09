@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block nav %}
+    <li><a href="/app01/book_manage/">书籍管理</a></li>
+    <li class="active"><a href="/app01/author_manage/">作者管理</a></li>
+    <li><a href="/app01/publish_manage/">出版社管理</a></li>
+{% endblock nav %}
+{% block content %}
+    <h1 class="page-header">作者管理</h1>
+    <div class="table-responsive">
+        <a href="/app01/add_author/" type="button" class="btn btn-primary btn-default">新增作者</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>id</th>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>电话</th>
+                <th>地址</th>
+                <th>生日</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for author in author_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ author.id }}</td>
+                    <td>{{ author.name }}</td>
+                    <td>{{ author.age }}</td>
+                    <td>{{ author.au_detail.get_gender_display }}</td>
+                    <td>{{ author.au_detail.tel }}</td>
+                    <td>{{ author.au_detail.addr }}</td>
+                    <td>{{ author.au_detail.birthday|date:"Y-m-d" }}</td>
+                    <td>
+                        <button class="btn_del btn btn-danger btn-sm" pk={{ author.id }}>删除</button>
+                        <a href="/app01/edit_author/?author_id={{ author.id }}"
+                           class="btn_edit btn btn-warning btn-sm">编辑</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
+
+        // 删除按钮
+        $(".btn_del").click(function () {
+            tr_obj = $(this).parent().parent();
+            author_id = $(this).attr('pk');
+            $.ajax({
+                url: '/app01/del_author/',
+                type: 'get',
+                data: {
+                    author_id: author_id
+                },
+                success: function (data) {
+                    let text = "删除失败";
+                    if (data.status) {
+                        text = "删除成功";
+                    }
+                    tr_obj.html("<td  style='color:red;' height='47px;' colspan=" + tr_obj.children().length + ">" + text + "</td>");
+                }
+            })
+        });
+    </script>
+{% endblock js %}

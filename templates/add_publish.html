@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block nav %}
+    <li><a href="/app01/book_manage/">书籍管理</a></li>
+    <li><a href="/app01/author_manage/">作者管理</a></li>
+    <li class="active"><a href="/app01/publish_manage/">出版社管理</a></li>
+{% endblock nav %}
+{% block content %}
+    <h1 class="page-header">出版社管理</h1>
+    {{ block.super }}
+    <form action="/app01/add_publish/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">出版社名</label>
+            <input type="text" class="form-control" id="name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="city">城市</label>
+            <input type="text" class="form-control" id="city" name="city">
+        </div>
+        <div class="form-group">
+            <label for="price">email</label>
+            <input type="email" class="form-control" id="price" name="email">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+{% endblock content %}

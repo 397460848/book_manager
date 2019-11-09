@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block nav %}
+    {{ block.super }}
+{% endblock nav %}
+{% block content %}
+    <h1 class="page-header">书籍管理</h1>
+    <div class="table-responsive">
+        <a href="/app01/add_book/" type="button" class="btn btn-primary btn-default">新增书籍</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>id</th>
+                <th>书名</th>
+                <th>价格</th>
+                <th>作者</th>
+                <th>出版社</th>
+                <th>出版时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for book in book_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ book.id }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.price }}</td>
+                    <td>{{ book.authors__name }}</td>
+                    <td>{{ book.publish__name }}</td>
+                    <td>{{ book.pub_date|date:"Y-m-d" }}</td>
+                    <td>
+                        <button class="btn_del btn btn-danger btn-sm" pk={{ book.id }}>删除</button>
+                        <a href="/app01/edit_book/?book_id={{ book.id }}" class="btn_edit btn btn-warning btn-sm">编辑</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
+
+        // 删除按钮
+        $(".btn_del").click(function () {
+            tr_obj = $(this).parent().parent();
+            book_id = $(this).attr('pk');
+            $.ajax({
+                url: '/app01/del_book/',
+                type: 'get',
+                data: {
+                    book_id: book_id
+                },
+                success: function (data) {
+                    let text = "删除失败";
+                    if (data.status) {
+                        text = "删除成功";
+                    }
+                    tr_obj.html("<td  style='color:red;' height='47px;' colspan=" + tr_obj.children().length + ">" + text + "</td>");
+                }
+            })
+        });
+    </script>
+{% endblock js %}
